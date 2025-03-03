@@ -12,8 +12,8 @@ hostname = subprocess.run("hostname",capture_output=True, text=True).stdout
 userOffsetHour = 0
 userOffsetMin = 0
 
-# Open SchedulingHours.txt and schedule.wpi
-fromSH = open(f"/home/{user}/Pollinator_Camera/SchedulingHours.txt", "r")
+# Open each_day_sunrise-sunset.txt and schedule.wpi
+fromSH = open(f"/home/{user}/Pollinator_Camera/each_day_sunrise-sunset.csv", "r")
 if user == "pi":
     if not os.path.exists("/home/pi/wittypi/schedule.wpi"):
         subprocess.run(["touch", "/home/pi/wittypi/schedule.wpi"])
@@ -48,7 +48,7 @@ except IndexError:
 
 # Calculate on time and off time for day camera
 try:
-    if "l" in hostname.lower():
+    if "day" in hostname.lower():
         DeltaOn = todaySunset - today
         onHour = int(DeltaOn.total_seconds() * -1 // 3600)
         onMinute = int(round(((DeltaOn.total_seconds() * -1 / 3600) - onHour) * 60, 0))
@@ -65,11 +65,11 @@ try:
         offHour = int(DeltaOff.total_seconds() * -1 // 3600)
         offMinute = int(((DeltaOff.total_seconds() * -1 / 3600) - offHour) * 60)
 
-    print(f"BEGIN {todaySunrise.isoformat(' ')}\nEND 2033-01-01 05:00:00\n\nON  H{onHour} M{onMinute}\nOFF  H{offHour} M{offMinute}")
+    #print(f"BEGIN {todaySunrise.isoformat(' ')}\nEND 2033-01-01 05:00:00\n\nON  H{onHour} M{onMinute}\nOFF  H{offHour} M{offMinute}")
     schWPI.write(f"BEGIN {today.isoformat(' ')}\nEND 2033-01-01 05:00:00\n\nON  H{onHour} M{onMinute}\nOFF  H{offHour} M{offMinute}")
 
 
-except:
+except NameError:
     print("---Hostname does not contain word day or night.\nIn order for the Camera to know how to create a schedule,\nThe hostname needs to have the word 'day' for a day camera or 'night' for night camera, not case sensitive.\nTo update the hostname:\nopen a terminal window (ctl+alt+t)\ntype 'sudo raspi-config' and press enter\npress enter again to select 'system options'\nSelect hostname\ntype a new hostname with the word night or day somewhere in it and then select 'ok'\n finally select 'yes' when asked to reboot.")
 
 

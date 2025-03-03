@@ -10,10 +10,8 @@ import getpass
 
 # get csv of sunset and sunrise times
 user = getpass.getuser()
-if user == "pi":
-    ss = open(f"/home/{user}/SPC/sunrise_sunset.csv")
-else:
-    ss = open("/home/aps_desktop/Pollinator_Camera/sunrise_sunset.csv")
+
+ss = open(f"/home/{user}/Pollinator_Camera/sunrise_sunset.csv")
 sslines = ss.readlines()
 ss.close()
 #print(sslines)
@@ -86,9 +84,9 @@ for date in range(len(datelist)-2): # for each date
 #write 
 #sunrise date (isoformat), sunset date (isoformat)
 if user == "pi":
-    toScheduling = open(f"/home/{user}/Pollinator_Camera/each_day_sunrise-sunset.txt", "w")
+    toScheduling = open(f"/home/{user}/Pollinator_Camera/each_day_sunrise-sunset.csv", "w")
 else:
-    toScheduling = open(f"/home/{user}/Pollinator_Camera/each_day_sunrise-sunset.txt", "w")
+    toScheduling = open(f"/home/{user}/Pollinator_Camera/each_day_sunrise-sunset.csv", "w")
 for d in range(len(datelist) // 2):
     toScheduling.write(datelist[d*2].isoformat(" ") + "," + datelist[d*2 + 1].isoformat(" ") + "\n")
 
