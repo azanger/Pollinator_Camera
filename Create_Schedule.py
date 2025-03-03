@@ -9,8 +9,11 @@ import getpass
 today = datetime.datetime.now()
 user = getpass.getuser()
 hostname = subprocess.run("hostname",capture_output=True, text=True).stdout
-userOffsetHour = 0
-userOffsetMin = 0
+OnUserOffsetHour = 0
+OnUserOffsetMin = 0
+OffUserOffsetHour = 0
+OffUserOffsetMin = 0
+
 
 # Open each_day_sunrise-sunset.txt and schedule.wpi
 fromSH = open(f"/home/{user}/Pollinator_Camera/each_day_sunrise-sunset.csv", "r")
@@ -50,23 +53,23 @@ except IndexError:
 try:
     if "day" in hostname.lower():
         DeltaOn = todaySunset - today
-        onHour = int(DeltaOn.total_seconds() * -1 // 3600)
-        onMinute = int(round(((DeltaOn.total_seconds() * -1 / 3600) - onHour) * 60, 0))
+        onHour = int(DeltaOn.total_seconds() // 3600)
+        onMinute = int(round(((DeltaOn.total_seconds() / 3600) - onHour) * 60, 0))
         DeltaOff = tomorrowSunrise - todaySunset
-        offHour = int(DeltaOff.total_seconds() * -1 // 3600)
-        offMinute = int(((DeltaOff.total_seconds() * -1 / 3600) - offHour) * 60)
+        offHour = int(DeltaOff.total_seconds() // 3600)
+        offMinute = int(((DeltaOff.total_seconds() / 3600) - offHour) * 60)
 
 
     elif "night" in hostname.lower():
         DeltaOn = tomorrowSunrise - today
-        onHour = int(DeltaOn.total_seconds() * -1 // 3600)
-        onMinute = int(round(((DeltaOn.total_seconds() * -1 / 3600) - onHour) * 60, 0))
+        onHour = int(DeltaOn.total_seconds() // 3600)
+        onMinute = int(round(((DeltaOn.total_seconds() / 3600) - onHour) * 60, 0))
         DeltaOff = tomorrowSunset - tomorrowSunrise
-        offHour = int(DeltaOff.total_seconds() * -1 // 3600)
-        offMinute = int(((DeltaOff.total_seconds() * -1 / 3600) - offHour) * 60)
+        offHour = int(DeltaOff.total_seconds() // 3600)
+        offMinute = int(((DeltaOff.total_seconds() / 3600) - offHour) * 60)
 
     #print(f"BEGIN {todaySunrise.isoformat(' ')}\nEND 2033-01-01 05:00:00\n\nON  H{onHour} M{onMinute}\nOFF  H{offHour} M{offMinute}")
-    schWPI.write(f"BEGIN {today.isoformat(' ')}\nEND 2033-01-01 05:00:00\n\nON  H{onHour} M{onMinute}\nOFF  H{offHour} M{offMinute}")
+    schWPI.write(f"BEGIN {today.isoformat(' ', timespec='minutes')}:00\nEND 2033-01-01 05:00:00\n\nON  H{onHour + OnUserOffsetHour} M{onMinute + OnUserOffsetMin}\nOFF  H{offHour + OffUserOffsetHour} M{offMinute + OffUserOffsetMin}")
 
 
 except NameError:
