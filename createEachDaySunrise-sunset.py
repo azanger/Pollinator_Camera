@@ -1,6 +1,9 @@
 #! /usr/bin/python3
-# from a list where rows == day of month, create a dictionary where key = month, 
-# value = list of sunrise sunset pairs
+
+# This script script takes as input a table (csv)of a year of sunrise and sunsets.
+#It transforms the input into a csv where each line's index is the day of the year(doy) - 1.
+#The format of each line is: 
+#(sunrise's YYYY:MM:DD HH:mm:SS), (sunset's YYYY:MM:DD HH:mm:SS)
 import datetime
 import getpass
 
@@ -10,7 +13,7 @@ user = getpass.getuser()
 if user == "pi":
     ss = open(f"/home/{user}/SPC/sunrise_sunset.csv")
 else:
-    ss = open("/home/aps_desktop/Documents/SERC_Pollinator/Sunrise_sunset/sunrise_sunset.csv")
+    ss = open("/home/aps_desktop/Pollinator_Camera/sunrise_sunset.csv")
 sslines = ss.readlines()
 ss.close()
 #print(sslines)
@@ -73,23 +76,20 @@ for date in range(len(datelist)-2): # for each date
 
 
 
-# calculates diferrence of each days sunset - sunrise
-# each item in list is a timeDelta object.
-deltalist = []
-for date in range(len(datelist)):
-    if date % 2 == 0:
-        deltalist.append(datelist[date + 1] - datelist[date])
+# # calculates diferrence of each days sunset - sunrise
+# # each item in list is a timeDelta object.
+# deltalist = []
+# for date in range(len(datelist)):
+#     if date % 2 == 0:
+#         deltalist.append(datelist[date + 1] - datelist[date])
 
-#write # of hours/minutes between sunrise and sunset to schedulingHours.txt with format: 
-# hours, minutes, sunrise date (isoformat), sunset date (isoformat)
+#write 
+#sunrise date (isoformat), sunset date (isoformat)
 if user == "pi":
-    toScheduling = open(f"/home/{user}/SPC/SchedulingHours.txt", "w")
+    toScheduling = open(f"/home/{user}/Pollinator_Camera/each_day_sunrise-sunset.txt", "w")
 else:
-    toScheduling = open(f"/home/{user}/Documents/SERC_Pollinator/Sunrise_sunset/SchedulingHours.txt", "w")
-
-for d in range(len(deltalist)):
-    deltaSplit = str(deltalist[d]).split(":")
-    print(deltaSplit[0] + "," + deltaSplit[1] + "," + datelist[d*2].isoformat() + "," + datelist[d*2 + 1].isoformat() + "\n")
-    toScheduling.write(deltaSplit[0] + "," + deltaSplit[1] + "," + datelist[d*2].isoformat() + "," + datelist[d*2 + 1].isoformat() + "\n")
+    toScheduling = open(f"/home/{user}/Pollinator_Camera/each_day_sunrise-sunset.txt", "w")
+for d in range(len(datelist) // 2):
+    toScheduling.write(datelist[d*2].isoformat(" ") + "," + datelist[d*2 + 1].isoformat(" ") + "\n")
 
 toScheduling.close()
