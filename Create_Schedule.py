@@ -14,10 +14,10 @@ OnUserOffsetMin = 0
 OffUserOffsetHour = 0
 OffUserOffsetMin = 0
 
-
+print("CreateScript.py is being run")
 # Open each_day_sunrise-sunset.txt and schedule.wpi
-fromSH = open(f"/home/{user}/Pollinator_Camera/each_day_sunrise-sunset.csv", "r")
-if user == "pi":
+fromSH = open(f"/home/pi/Pollinator_Camera/each_day_sunrise-sunset.csv", "r")
+if user == "pi" or user == "root":
     if not os.path.exists("/home/pi/wittypi/schedule.wpi"):
         subprocess.run(["touch", "/home/pi/wittypi/schedule.wpi"])
     schWPI = open("/home/pi/wittypi/schedule.wpi", "w")
