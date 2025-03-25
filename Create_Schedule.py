@@ -4,15 +4,23 @@ import datetime
 import os.path
 import subprocess
 import getpass
+from os import access
 
 
 today = datetime.datetime.now()
 user = getpass.getuser()
 hostname = subprocess.run("hostname",capture_output=True, text=True).stdout
-OnUserOffsetHour = 0
-OnUserOffsetMin = 0
-OffUserOffsetHour = 0
-OffUserOffsetMin = 0
+
+# load offset file
+f = open("/home/pi/Pollinator_Camera/WakeupShutdownOffset.txt")
+offsets = f.readlines()
+f.close()
+
+OnUserOffsetHour = int(offsets[0].strip())
+OnUserOffsetMin = int(offsets[1].strip())
+OffUserOffsetHour = int(offsets[2].strip())
+OffUserOffsetMin = int(offsets[3].strip())
+
 
 print("CreateScript.py is being run")
 # Open each_day_sunrise-sunset.txt and schedule.wpi
@@ -20,11 +28,14 @@ fromSH = open(f"/home/pi/Pollinator_Camera/each_day_sunrise-sunset.csv", "r")
 if user == "pi" or user == "root":
     if not os.path.exists("/home/pi/wittypi/schedule.wpi"):
         subprocess.run(["touch", "/home/pi/wittypi/schedule.wpi"])
+        subprocess.run("chmod 755 /home/pi/wittypi/schedule.wpi".split())
+    subprocess.run("chmod 755 /home/pi/wittypi/schedule.wpi".split())
     schWPI = open("/home/pi/wittypi/schedule.wpi", "w")
 else:
     print(f"username is not pi, therefore assuming this isn't a raspberry pi, saving schedule.wpi to /home/{user}/Pollinator_Camera")
     if not os.path.exists("/home/{user}/Pollinator_Camera/schedule.wpi"):
         subprocess.run(["touch", f"/home/{user}/Pollinator_Camera/schedule.wpi"])
+        subprocess.run(f"sudo chmod 755 /home/{user}/wittypi/schedule.wpi".split())
     schWPI = open(f"/home/{user}/Pollinator_Camera/schedule.wpi", "w")
 fromSHL = fromSH.readlines()
 fromSH.close()
