@@ -14,15 +14,19 @@ lowV=$(hex2dec $lowV)
 #check wakeup flag, if on then:
 if [[ $alarmStart -eq 1 ]]; then
     /usr/bin/echo "wakeup flag is 1 -raised-"
-    /usr/sbin/i2cset -y 1 0x08 22 1
-    /usr/bin/echo "Auto On If USB connected set of ON"
     /usr/bin/python3 /home/pi/Pollinator_Camera/Create_Schedule.py
     /usr/bin/echo "Scheduale.wpi created"
     /home/pi/wittypi/runScript.sh
     /usr/bin/cat /home/pi/wittypi/schedule.wpi
-    /usr/sbin/i2cset -y 1 0x08 22 1
-    /usr/bin/echo "AutoOn set to ON"
 fi
+
+if [[ $lowV -eq 1 ]]; then
+    /usr/bin/echo "wakeup after low voltage shutdown and subsequent recharge period"
+    /usr/bin/cat /home/pi/wittypi/schedule.wpi
+    /usr/bin/python3 /home/pi/Pollinator_Camera/Create_Schedule.py
+    /usr/bin/cat /home/pi/wittypi/schedule.wpi
+    /home/pi/wittypi/runScript.sh
+    /usr/bin/tail -n 5 /home/pi/wittypi/schedule.log
 
 #if these flags are all down, then it probably means the camera was started manually
 # this could be from the button or auto on by plugging in the usb
