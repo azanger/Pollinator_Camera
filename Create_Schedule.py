@@ -35,7 +35,7 @@ else:
     print(f"username is not pi, therefore assuming this isn't a raspberry pi, saving schedule.wpi to /home/{user}/Pollinator_Camera")
     if not os.path.exists("/home/{user}/Pollinator_Camera/schedule.wpi"):
         subprocess.run(["touch", f"/home/{user}/Pollinator_Camera/schedule.wpi"])
-        subprocess.run(f"sudo chmod 755 /home/{user}/wittypi/schedule.wpi".split())
+        subprocess.run(f"sudo chmod 777 /home/{user}/wittypi/schedule.wpi".split())
     schWPI = open(f"/home/{user}/Pollinator_Camera/schedule.wpi", "w")
 fromSHL = fromSH.readlines()
 fromSH.close()
