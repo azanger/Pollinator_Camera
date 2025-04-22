@@ -63,6 +63,7 @@ except IndexError:
 # Calculate on time and off time for day camera
 try:
     if "day" in hostname.lower():
+        print("Creating Schedule for a Day Camera")
         DeltaOn = todaySunset - today
         onHour = int(DeltaOn.total_seconds() // 3600)
         onMinute = int(round(((DeltaOn.total_seconds() / 3600) - onHour) * 60, 0))
@@ -72,6 +73,7 @@ try:
 
 
     elif "night" in hostname.lower():
+        print("Creating Schedule for a Night Camera")
         DeltaOn = tomorrowSunrise - today
         onHour = int(DeltaOn.total_seconds() // 3600)
         onMinute = int(round(((DeltaOn.total_seconds() / 3600) - onHour) * 60, 0))
