@@ -21,8 +21,12 @@ OnUserOffsetMin = int(offsets[1].strip())
 OffUserOffsetHour = int(offsets[2].strip())
 OffUserOffsetMin = int(offsets[3].strip())
 
-
 print("CreateScript.py is being run")
+#Double check following prints arent swapped, also put in appropriate day night specific blocks
+print(f"Camera's time to shutdown offset from sunset by: {OnUserOffsetHour}:{OnUserOffsetMin}")
+print(f"Camera's time to wakeup offset from sunrise by: {OffUserOffsetHour}:{OffUserOffsetMin}")
+
+
 # Open each_day_sunrise-sunset.txt and schedule.wpi
 fromSH = open(f"/home/pi/Pollinator_Camera/each_day_sunrise-sunset.csv", "r")
 if user == "pi" or user == "root":
