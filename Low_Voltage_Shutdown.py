@@ -36,7 +36,6 @@ prevH = int(prevShut[0].strip().strip("\n"))
 prevM = int(prevShut[1].strip().strip("\n"))
 
 
-
 # get current shutdown/wakeup time
 def get_current_schedule_iso():
     shutdown = ""
@@ -67,14 +66,9 @@ if today + datetime.timedelta(seconds=(shutdownLengthHour * 3600)+(shutdownLengt
     print(Minute)
 
 
-
-
-
-
-
 schWPI = open("/home/pi/wittypi/schedule.wpi", "w")
 if trig == 0:
-    print("Putting Camera to Sleep for an hour to recharge")
+    print("Putting Camera to Sleep for an hour to recharge (hopefully)")
     schWPI.write(f"BEGIN {today.isoformat(' ', timespec='minutes')}:00\nEND 2033-01-01 05:00:00\n\nON  H M1 \nOFF  H{shutdownLengthHour} M{shutdownLengthMin}")
 else:
     print("Shutting down Camera Early due to low charge, will wake at next scheduled startup.")
